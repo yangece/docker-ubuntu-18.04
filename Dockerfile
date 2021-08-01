@@ -3,8 +3,7 @@ FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive 
 
-RUN  echo "52.22.146.88 index.docker.io" >> /etc/hosts \
-  && apt-get update \
+RUN apt-get update \
   && apt-get install -y -qq --no-install-recommends \
        curl \
        apt-utils \
@@ -16,7 +15,7 @@ RUN  echo "52.22.146.88 index.docker.io" >> /etc/hosts \
   && apt-get install -y -qq \
      iputils-ping \
      build-essential \
-     python2.7 \
+     python3 \
      python-pip \
      python-virtualenv \
      python-dev \
@@ -30,6 +29,7 @@ RUN  echo "52.22.146.88 index.docker.io" >> /etc/hosts \
      xfonts-100dpi \
      xfonts-75dpi \
      xfonts-cyrillic \
+     wget \
   \
   && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
   && apt-key fingerprint 0EBFCD88 \
@@ -59,6 +59,9 @@ RUN  set -ex; \
      rm /usr/local/bin/su-exec.c; \
      \
      apt-get purge -y --auto-remove $fetch_deps
+
+RUN wget https://raw.githubusercontent.com/PX4/Devguide/master/build_scripts/ubuntu_sim_ros_melodic.sh
+RUN bash ubuntu_sim_ros_melodic.sh
 
 # Enable the dynamic setting of the user
 COPY provision_container.sh /usr/local/bin/
