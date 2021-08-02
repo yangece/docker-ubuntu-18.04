@@ -15,10 +15,9 @@ RUN apt-get update \
   && apt-get install -y -qq \
      iputils-ping \
      build-essential \
-     python3 \
-     python-pip \
-     python-virtualenv \
-     python-dev \
+     python3.8 python3.8-venv python3-venv \
+     python3-pip \
+     python3-dev \
      vim \
      git \
      sudo \
@@ -61,7 +60,7 @@ RUN  set -ex; \
      apt-get purge -y --auto-remove $fetch_deps
 
 RUN wget https://raw.githubusercontent.com/PX4/Devguide/master/build_scripts/ubuntu_sim_ros_melodic.sh
-RUN bash ubuntu_sim_ros_melodic.sh
+#RUN bash ubuntu_sim_ros_melodic.sh
 
 # Enable the dynamic setting of the user
 COPY provision_container.sh /usr/local/bin/
@@ -73,7 +72,7 @@ CMD ["/bin/bash"]
 ARG BUILD_DATE
 ARG VCS_REF
 ARG VCS_URL
-LABEL org.label-schema.vendor="XYZ Company" \
+LABEL org.label-schema.vendor="HazMap team" \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-url=$VCS_URL \
       org.label-schema.vcs-ref=$VCS_REF \

@@ -1,4 +1,4 @@
-DTR ?= aiot20
+DTR ?= hazmap
 
 BASE_IMAGE = ubuntu:18.04
 IMG = ubuntu18.04

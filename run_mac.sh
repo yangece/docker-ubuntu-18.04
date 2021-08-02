@@ -1,12 +1,10 @@
 #!/bin/bash
 
-docker_image=hazmap/ubuntu18.04
-
 # Grab the current user's uid and gid information
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 GROUP=$(id -ng)
-DOCKER_GID=$(cut -d: -f3 < <(getent group docker))
+DOCKER_GID=
 CNAME=${USER}_$(date +%m%d_%H%m%S)
 
 # Set the display
@@ -15,10 +13,7 @@ if [ "$(uname)" == "Darwin" ]; then
     xhost + $ip
     xsession="-e DISPLAY=$ip:0 -v /tmp/.X11-unix:/tmp/.X11-unix"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-    # if we weren't mapping $HOME:$HOME, we would need to at least
-    # map the XAUTHORITY informaiton 
-    #           -e XAUTHORITY=/tmp/.Xauthority \
-    #           -v $HOME/.Xauthority:/tmp/.Xauthority \
+    DOCKER_GID=$(cut -d: -f3 < <(getent group docker))
     xsession="-e DISPLAY \
               -v /tmp/.X11-unix:/tmp/.X11-unix"
 else
@@ -41,9 +36,7 @@ docker run --rm -it \
     -e USER_ID=$USER_ID \
     -e GROUP=$GROUP \
     -e GROUP_ID=$GROUP_ID \
-    -e DOCKER_GID=$DOCKER_GID \
     -v $HOME:$HOME \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /etc/localtime:/etc/localtime:ro \
-    $docker_image \
+    hazmap/ubuntu18.04:latest \
     "$@"

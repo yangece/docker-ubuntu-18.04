@@ -55,7 +55,7 @@ if [ ! $(getent passwd $USER_ID) ]; then
 
   # Add this user to the docker group matching the host's docker gid
   # This will allow our user to run docker commands without sudo
-  usermod -aG $DOCKER_GID ${USER}
+  #usermod -aG $DOCKER_GID ${USER}
 
   # Allow the user no password sudo access
   echo "$USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
