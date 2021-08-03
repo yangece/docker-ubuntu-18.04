@@ -1,10 +1,17 @@
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
-ENV DEBIAN_FRONTEND=noninteractive 
+#ENV set -ex \
+#    && http_proxy=${http_proxy} \
+#    https_proxy=${http_proxy} \
+#    no_proxy=${no_proxy}  
+#ENV DEBIAN_FRONTEND=noninteractive 
+
+#RUN  echo 'Acquire::http::Proxy "http://PITC-Zscaler-Americas-Alpharetta3PR.proxy.corporate.ge.com:80";' >> /etc/apt/apt.conf.d/01proxy  \
+#  && echo 'Acquire::https::Proxy "http://PITC-Zscaler-Americas-Alpharetta3PR.proxy.corporate.ge.com:80";' >> /etc/apt/apt.conf.d/01proxy
 
 RUN apt-get update \
-  && apt-get install -y -qq --no-install-recommends \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
        curl \
        apt-utils \
        lsb-release \
@@ -12,12 +19,12 @@ RUN apt-get update \
        software-properties-common \
        ca-certificates \
   \
-  && apt-get install -y -qq \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
      iputils-ping \
      build-essential \
-     python3.8 python3.8-venv python3-venv \
+     python3.8 python3.8-venv \
      python3-pip \
-     python3-dev \
+     python3.8-dev \
      vim \
      git \
      sudo \
@@ -41,6 +48,9 @@ RUN apt-get update \
   && mkdir /tmp/.X11-unix \
   && chmod 1777 /tmp/.X11-unix \
   && chown root:root /tmp/.X11-unix/
+
+RUN python3.8 -m venv /venv
+ENV PATH=/venv/bin:$PATH
 
 # Install latest su-exec
 RUN  set -ex; \
